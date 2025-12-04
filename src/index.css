@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@theme {
+  --color-primary: #3650D0;
+  --color-primary-dark: #2b3fa6;
+  --color-secondary: #FF7B00;
+  --color-dark: #111827;
+}
+
+/* App shell tweaks */
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-gray-50 text-gray-900;
+}
