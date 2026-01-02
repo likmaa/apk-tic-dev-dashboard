@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { api } from '@/api/client'
+import { useAuth } from '@/hooks/useAuth'
+import { X } from 'lucide-react'
 
 type User = {
   id: number
@@ -24,8 +26,14 @@ export default function UsersManagementPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [paged, setPaged] = useState<Paged<User>>({ data: [], current_page: 1, per_page: 20, total: 0 })
+  const { user: currentUser } = useAuth()
 
-  const roles = useMemo(() => ['admin','developer','driver','passenger'], [])
+  // Creation State
+  const [showCreate, setShowCreate] = useState(false)
+  const [createData, setCreateData] = useState({ name: '', email: '', phone: '', password: '', role: 'admin' })
+  const [createLoading, setCreateLoading] = useState(false)
+
+  const roles = useMemo(() => ['admin', 'developer', 'driver', 'passenger'], [])
 
   const fetchUsers = async () => {
     setLoading(true)
@@ -85,33 +93,60 @@ export default function UsersManagementPage() {
     }
   }
 
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setCreateLoading(true)
+    try {
+      await api.post('/api/admin/users', createData)
+      setShowCreate(false)
+      setCreateData({ name: '', email: '', phone: '', password: '', role: 'admin' })
+      fetchUsers() // Refresh list
+      alert("Utilisateur créé !")
+    } catch (err: any) {
+      alert(err?.response?.data?.message || "Erreur de création")
+    } finally {
+      setCreateLoading(false)
+    }
+  }
+
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold text-gray-800">Utilisateurs</h2>
-      <div className="flex flex-wrap items-center gap-2">
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Rechercher nom / email / téléphone"
-          className="px-3 py-2 border rounded-md text-sm"
-        />
-        <select
-          value={roleFilter}
-          onChange={(e) => setRoleFilter(e.target.value)}
-          className="px-3 py-2 border rounded-md text-sm"
-        >
-          <option value="">Tous les rôles</option>
-          {roles.map((r) => (
-            <option key={r} value={r}>{r}</option>
-          ))}
-        </select>
-        <button
-          onClick={onSearch}
-          className="px-3 py-2 bg-primary text-white rounded-md text-sm"
-          disabled={loading}
-        >
-          Rechercher
-        </button>
+      <div className="flex flex-wrap items-center gap-2 justify-between">
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Rechercher nom / email / téléphone"
+            className="px-3 py-2 border rounded-md text-sm"
+          />
+          <select
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value)}
+            className="px-3 py-2 border rounded-md text-sm"
+          >
+            <option value="">Tous les rôles</option>
+            {roles.map((r) => (
+              <option key={r} value={r}>{r}</option>
+            ))}
+          </select>
+          <button
+            onClick={onSearch}
+            className="px-3 py-2 bg-primary text-white rounded-md text-sm"
+            disabled={loading}
+          >
+            Rechercher
+          </button>
+        </div>
+
+        {currentUser?.role === 'developer' && (
+          <button
+            onClick={() => setShowCreate(true)}
+            className="px-4 py-2 bg-green-600 text-white rounded-md text-sm hover:bg-green-700"
+          >
+            + Nouveau Admin
+          </button>
+        )}
       </div>
 
       {error ? <div className="text-red-600 text-sm">{error}</div> : null}
@@ -182,6 +217,89 @@ export default function UsersManagementPage() {
           Suivant
         </button>
       </div>
+
+      {showCreate && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
+            <button
+              onClick={() => setShowCreate(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            >
+              <X size={20} />
+            </button>
+            <h3 className="text-lg font-bold mb-4">Créer un nouvel utilisateur</h3>
+            <form onSubmit={handleCreate} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Nom</label>
+                <input
+                  required
+                  className="w-full border rounded p-2"
+                  value={createData.name}
+                  onChange={e => setCreateData({ ...createData, name: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Email</label>
+                <input
+                  required
+                  type="email"
+                  className="w-full border rounded p-2"
+                  value={createData.email}
+                  onChange={e => setCreateData({ ...createData, email: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Téléphone</label>
+                <input
+                  required
+                  className="w-full border rounded p-2"
+                  value={createData.phone}
+                  onChange={e => setCreateData({ ...createData, phone: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Mot de passe</label>
+                <input
+                  required
+                  type="password"
+                  minLength={8}
+                  className="w-full border rounded p-2"
+                  value={createData.password}
+                  onChange={e => setCreateData({ ...createData, password: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Rôle</label>
+                <select
+                  className="w-full border rounded p-2"
+                  value={createData.role}
+                  onChange={e => setCreateData({ ...createData, role: e.target.value })}
+                >
+                  <option value="admin">Admin</option>
+                  <option value="driver">Chauffeur</option>
+                  <option value="passenger">Passager</option>
+                </select>
+              </div>
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowCreate(false)}
+                  className="px-4 py-2 border rounded hover:bg-gray-50"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="submit"
+                  disabled={createLoading}
+                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                >
+                  {createLoading ? 'Création...' : 'Créer'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

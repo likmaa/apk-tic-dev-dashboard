@@ -74,18 +74,16 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => { setLoginMethod('email'); setIdentifier(''); }}
-            className={`w-1/2 py-2 text-sm font-medium rounded-md transition-colors ${
-              loginMethod === 'email' ? 'bg-white shadow text-primary' : 'text-gray-600 hover:bg-gray-200'
-            }`}
+            className={`w-1/2 py-2 text-sm font-medium rounded-md transition-colors ${loginMethod === 'email' ? 'bg-white shadow text-primary' : 'text-gray-600 hover:bg-gray-200'
+              }`}
           >
             Email
           </button>
           <button
             type="button"
             onClick={() => { setLoginMethod('phone'); setIdentifier(''); }}
-            className={`w-1/2 py-2 text-sm font-medium rounded-md transition-colors ${
-              loginMethod === 'phone' ? 'bg-white shadow text-primary' : 'text-gray-600 hover:bg-gray-200'
-            }`}
+            className={`w-1/2 py-2 text-sm font-medium rounded-md transition-colors ${loginMethod === 'phone' ? 'bg-white shadow text-primary' : 'text-gray-600 hover:bg-gray-200'
+              }`}
           >
             Téléphone
           </button>

@@ -123,7 +123,7 @@ export default function App() {
       <Route
         path="/users"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "developer"]}>
             <AppLayout>
               <UsersManagementPage />
             </AppLayout>
