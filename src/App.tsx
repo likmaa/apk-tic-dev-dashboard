@@ -16,6 +16,7 @@ import AppLayout from '@/components/AppLayout'
 import UsersManagementPage from '@/pages/UsersManagementPage'
 import OnlineDriversPage from '@/pages/OnlineDriversPage'
 import DriversStatsPage from '@/pages/DriversStatsPage'
+import ActiveRidesPage from '@/pages/ActiveRidesPage'
 
 function LoadingScreen() {
   return (
@@ -41,7 +42,7 @@ function HomeRedirect() {
   if (!hydrated) return <LoadingScreen />
   if (!user) return <Navigate to="/login" replace />
   if (user.role === 'admin') return <Navigate to="/overview" replace />
-  if (user.role === 'developer') return <Navigate to="/drivers/pending" replace />
+  if (user.role === 'developer') return <Navigate to="/overview" replace />
   // Fallback for other roles if they ever log into this dashboard
   return <Navigate to="/login" replace />
 }
@@ -63,7 +64,7 @@ export default function App() {
       <Route
         path="/overview"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "developer"]}>
             <AppLayout>
               <DashboardOverview />
             </AppLayout>
@@ -73,7 +74,7 @@ export default function App() {
       <Route
         path="/pricing"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "developer"]}>
             <AppLayout>
               <PricingConfigPage />
             </AppLayout>
@@ -83,7 +84,7 @@ export default function App() {
       <Route
         path="/finance"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "developer"]}>
             <AppLayout>
               <FinancePage />
             </AppLayout>
@@ -93,7 +94,7 @@ export default function App() {
       <Route
         path="/fleet"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "developer"]}>
             <AppLayout>
               <FleetManagementPage />
             </AppLayout>
@@ -103,7 +104,7 @@ export default function App() {
       <Route
         path="/passengers"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "developer"]}>
             <AppLayout>
               <PassengersDBPage />
             </AppLayout>
@@ -113,7 +114,7 @@ export default function App() {
       <Route
         path="/passengers/:id"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "developer"]}>
             <AppLayout>
               <PassengersDetailsPage />
             </AppLayout>
@@ -133,7 +134,7 @@ export default function App() {
       <Route
         path="/drivers/online"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "developer"]}>
             <AppLayout>
               <OnlineDriversPage />
             </AppLayout>
@@ -143,7 +144,7 @@ export default function App() {
       <Route
         path="/drivers/stats"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "developer"]}>
             <AppLayout>
               <DriversStatsPage />
             </AppLayout>
@@ -151,9 +152,19 @@ export default function App() {
         }
       />
       <Route
+        path="/rides/active"
+        element={
+          <PrivateRoute roles={["admin", "developer"]}>
+            <AppLayout>
+              <ActiveRidesPage />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
         path="/notifications"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "developer"]}>
             <AppLayout>
               <NotificationsPage />
             </AppLayout>
@@ -163,7 +174,7 @@ export default function App() {
       <Route
         path="/accounts"
         element={
-          <PrivateRoute roles={["admin"]}>
+          <PrivateRoute roles={["admin", "developer"]}>
             <AppLayout>
               <AccountsModerationPage />
             </AppLayout>

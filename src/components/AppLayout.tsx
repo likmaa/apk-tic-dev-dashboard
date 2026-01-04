@@ -40,6 +40,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   const adminMenu = [
     { to: '/overview', label: "Vue d'ensemble", icon: <LayoutDashboard size={18} /> },
+    { to: '/rides/active', label: 'Courses en cours', icon: <Car size={18} /> },
     { to: '/drivers/pending', label: 'Chauffeurs en attente', icon: <UserCheck size={18} /> },
     { to: '/drivers/online', label: 'Statut chauffeurs', icon: <UserCheck size={18} /> },
     { to: '/drivers/stats', label: 'Statistiques chauffeurs', icon: <UserCheck size={18} /> },
@@ -53,9 +54,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   ];
 
   const developerMenu = [
-    { to: '/drivers/pending', label: 'Chauffeurs en attente', icon: <UserCheck size={18} /> },
+    ...adminMenu,
     { to: '/dev/tools', label: 'Outils développeur', icon: <Code size={18} /> },
-    { to: '/users', label: 'Utilisateurs (Admin)', icon: <Users size={18} /> },
   ];
 
   const renderNavItems = (onClick?: () => void) => (

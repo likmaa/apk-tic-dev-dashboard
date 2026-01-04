@@ -276,6 +276,7 @@ export default function UsersManagementPage() {
                   onChange={e => setCreateData({ ...createData, role: e.target.value })}
                 >
                   <option value="admin">Admin</option>
+                  <option value="developer">Développeur</option>
                   <option value="driver">Chauffeur</option>
                   <option value="passenger">Passager</option>
                 </select>
