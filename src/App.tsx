@@ -17,6 +17,8 @@ import UsersManagementPage from '@/pages/UsersManagementPage'
 import OnlineDriversPage from '@/pages/OnlineDriversPage'
 import DriversStatsPage from '@/pages/DriversStatsPage'
 import ActiveRidesPage from '@/pages/ActiveRidesPage'
+import PerformanceMetricsPage from '@/pages/PerformanceMetricsPage'
+import ReconnectionAnalyticsPage from '@/pages/ReconnectionAnalyticsPage'
 
 function LoadingScreen() {
   return (
@@ -187,6 +189,26 @@ export default function App() {
           <PrivateRoute roles={["developer"]}>
             <AppLayout>
               <DeveloperToolsPage />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/dev/metrics"
+        element={
+          <PrivateRoute roles={["developer"]}>
+            <AppLayout>
+              <PerformanceMetricsPage />
+            </AppLayout>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/dev/reconnections"
+        element={
+          <PrivateRoute roles={["developer"]}>
+            <AppLayout>
+              <ReconnectionAnalyticsPage />
             </AppLayout>
           </PrivateRoute>
         }

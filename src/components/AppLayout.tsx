@@ -3,7 +3,7 @@ import { NavLink, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import {
   LayoutDashboard, Users, UserCheck, Car, DollarSign, Bell,
-  ShieldCheck, Code, LogOut, Menu, X
+  ShieldCheck, Code, LogOut, Menu, X, Activity, Wifi
 } from 'lucide-react';
 
 import Img from '@/assets/LOGO_OR.png';
@@ -56,6 +56,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const developerMenu = [
     ...adminMenu,
     { to: '/dev/tools', label: 'Outils développeur', icon: <Code size={18} /> },
+    { to: '/dev/metrics', label: 'Métriques performance', icon: <Activity size={18} /> },
+    { to: '/dev/reconnections', label: 'Analytics reconnexions', icon: <Wifi size={18} /> },
   ];
 
   const renderNavItems = (onClick?: () => void) => (
