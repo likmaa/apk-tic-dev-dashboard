@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '@/api/client';
 import { useAuth } from '@/hooks/useAuth';
-import { Mail, Phone, Lock, LogIn } from 'lucide-react'; // Icônes pour une meilleure UI
+import { Mail, Phone, Lock, LogIn, Eye, EyeOff } from 'lucide-react'; // Icônes pour une meilleure UI
 
 // ⚡ Si lucide-react n'est pas installé :
 // npm install lucide-react
@@ -35,6 +35,7 @@ export default function LoginPage() {
   const [loginMethod, setLoginMethod] = useState<'email' | 'phone'>('email');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   // 🔧 Gestion du formulaire
   const onSubmit = async (e: React.FormEvent) => {
@@ -116,17 +117,26 @@ export default function LoginPage() {
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
               Mot de passe
             </label>
-            <InputField
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                console.log('Password changed:', e.target.value);
-                setPassword(e.target.value);
-              }}
-              required
-              icon={<Lock size={18} />}
-            />
+            <div className="relative">
+              <InputField
+                id="password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  console.log('Password changed:', e.target.value);
+                  setPassword(e.target.value);
+                }}
+                required
+                icon={<Lock size={18} />}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
 
           {/* ⚠️ Message d’erreur */}
